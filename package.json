@@ -6,8 +6,7 @@
   "scripts": {
     "start": "python3 -m http.server 3000",
     "serve": "python3 -m http.server 8080",
-    "build": "echo 'No build step required for static site'",
-    "deploy": "echo 'Ready for deployment to Cloudflare Pages'"
+    "build": "echo 'No build step required for static site'"
   },
   "keywords": [
     "photo",
