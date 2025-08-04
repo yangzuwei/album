@@ -243,8 +243,34 @@ function renderPhotos() {
 function createPhotoCard(photo, index) {
     const card = document.createElement('div');
     card.className = 'photo-card reveal-on-scroll';
-    card.onclick = () => openLightbox(index);
     card.setAttribute('data-delay', index * 50);
+
+    // 增强的点击事件
+    card.onclick = (e) => {
+        openLightbox(index);
+        
+        // 播放点击音效
+        if (window.advancedEffects) {
+            window.advancedEffects.playSound('open');
+        }
+        
+        // 触发点击爆炸效果
+        if (window.advancedEffects) {
+            window.advancedEffects.createExplosion(e.clientX, e.clientY);
+        }
+    };
+
+    // 添加悬停音效
+    card.addEventListener('mouseenter', () => {
+        if (window.advancedEffects) {
+            window.advancedEffects.playSound('hover');
+        }
+    });
+
+    // 添加爆炸点击效果
+    if (window.advancedEffects) {
+        window.advancedEffects.addClickExplosion(card);
+    }
 
     const randomHeight = currentViewMode === 'masonry' ? 
         `${Math.floor(Math.random() * 150) + 200}px` : '250px';
@@ -336,6 +362,11 @@ function toggleSearch() {
 function handleSearch() {
     const query = searchInput.value.toLowerCase().trim();
     
+    // 触发搜索事件用于成就系统
+    if (query !== '') {
+        document.dispatchEvent(new CustomEvent('searchPerformed'));
+    }
+    
     if (query === '') {
         filterPhotos(currentFilter);
         return;
@@ -406,6 +437,14 @@ function openLightbox(index) {
     
     // Preload adjacent images
     preloadAdjacentImages(index);
+    
+    // 预加载相邻图片（高级特效版本）
+    if (window.imageShowcaseEffects) {
+        window.imageShowcaseEffects.preloadAdjacentImages(index, currentPhotos);
+    }
+    
+    // 触发图片变更事件
+    document.dispatchEvent(new CustomEvent('lightboxImageChanged'));
 }
 
 function closeLightbox() {
@@ -431,6 +470,14 @@ function navigateLightbox(direction) {
             lightboxDescription.textContent = photo.description;
             lightboxDate.textContent = formatDate(photo.date);
             lightboxCategory.textContent = getCategoryName(photo.category);
+            
+            // 触发图片变更事件
+            document.dispatchEvent(new CustomEvent('lightboxImageChanged'));
+            
+            // 预加载相邻图片
+            if (window.imageShowcaseEffects) {
+                window.imageShowcaseEffects.preloadAdjacentImages(newIndex, currentPhotos);
+            }
             
             lightboxImage.style.opacity = '1';
             lightboxImage.style.transform = 'scale(1)';
@@ -715,6 +762,9 @@ function setupAdvancedInteractions() {
 function toggleTheme() {
     isDarkMode = !isDarkMode;
     document.body.classList.add('theme-transition');
+    
+    // 触发主题变更事件用于成就系统
+    document.dispatchEvent(new CustomEvent('themeChanged'));
     
     if (isDarkMode) {
         document.documentElement.setAttribute('data-theme', 'dark');
