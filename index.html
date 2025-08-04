@@ -9,13 +9,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📷</text></svg>">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen">
+    <div class="loading-screen enhanced-loading" id="loadingScreen">
+        <div class="loading-logo">📸</div>
         <div class="loading-spinner"></div>
-        <p>加载中...</p>
+        <div class="loading-text">加载精美相册中...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" id="loadingProgressBar"></div>
+        </div>
     </div>
 
     <header class="header">
@@ -26,14 +31,14 @@
                     <span class="logo-text">精美相册</span>
                 </h1>
                 <nav class="nav">
-                    <button class="nav-btn active" data-category="all">全部</button>
-                    <button class="nav-btn" data-category="nature">自然</button>
-                    <button class="nav-btn" data-category="city">城市</button>
-                    <button class="nav-btn" data-category="portrait">人像</button>
-                    <button class="nav-btn" data-category="food">美食</button>
+                    <button class="nav-btn magnetic-btn active" data-category="all">全部</button>
+                    <button class="nav-btn magnetic-btn" data-category="nature">自然</button>
+                    <button class="nav-btn magnetic-btn" data-category="city">城市</button>
+                    <button class="nav-btn magnetic-btn" data-category="portrait">人像</button>
+                    <button class="nav-btn magnetic-btn" data-category="food">美食</button>
                 </nav>
                 <div class="header-actions">
-                    <button class="view-toggle" id="viewToggle" title="切换视图">
+                    <button class="view-toggle magnetic-btn tooltip" id="viewToggle" title="切换视图" data-tooltip="切换网格/瀑布流视图">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="3" y="3" width="7" height="7"/>
                             <rect x="14" y="3" width="7" height="7"/>
@@ -41,10 +46,16 @@
                             <rect x="3" y="14" width="7" height="7"/>
                         </svg>
                     </button>
-                    <button class="search-toggle" id="searchToggle" title="搜索">
+                    <button class="search-toggle magnetic-btn tooltip" id="searchToggle" title="搜索" data-tooltip="搜索照片">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"/>
                             <path d="21 21l-4.35-4.35"/>
+                        </svg>
+                    </button>
+                    <button class="theme-toggle magnetic-btn tooltip" id="themeToggle" title="主题切换" data-tooltip="切换暗色/亮色主题">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
                         </svg>
                     </button>
                 </div>
@@ -63,10 +74,14 @@
 
     <main class="main">
         <div class="container">
-            <div class="gallery-stats">
+            <div class="gallery-stats reveal-on-scroll">
                 <span id="photoCount">0</span> 张照片
+                <span class="gallery-info">
+                    · <span id="loadedCount">0</span> 已加载
+                    · <span id="viewMode">网格</span>视图
+                </span>
             </div>
-            <div class="gallery" id="gallery">
+            <div class="gallery reveal-on-scroll" id="gallery">
                 <!-- Photos will be dynamically loaded here -->
             </div>
         </div>
@@ -132,6 +147,7 @@
         </div>
     </footer>
 
+    <script src="js/enhancements.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

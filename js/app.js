@@ -116,6 +116,12 @@ let currentViewMode = 'grid';
 let currentPhotos = [...photoData];
 let currentLightboxIndex = 0;
 let isLightboxOpen = false;
+let isDarkMode = false;
+
+// Enhanced instances
+let particleBackground = null;
+let imagePreloader = null;
+let scrollAnimations = null;
 
 // DOM elements
 const gallery = document.getElementById('gallery');
@@ -125,8 +131,12 @@ const searchBar = document.getElementById('searchBar');
 const searchInput = document.getElementById('searchInput');
 const searchClear = document.getElementById('searchClear');
 const viewToggle = document.getElementById('viewToggle');
+const themeToggle = document.getElementById('themeToggle');
 const photoCount = document.getElementById('photoCount');
+const loadedCount = document.getElementById('loadedCount');
+const viewMode = document.getElementById('viewMode');
 const loadingScreen = document.getElementById('loadingScreen');
+const loadingProgressBar = document.getElementById('loadingProgressBar');
 
 // Lightbox elements
 const lightbox = document.getElementById('lightbox');
@@ -147,14 +157,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeApp() {
-    // Show loading screen initially
-    setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-        renderPhotos();
-        setupEventListeners();
-        setupScrollAnimations();
-        updatePhotoCount();
-    }, 1500);
+    // Initialize enhanced components
+    particleBackground = new ParticleBackground();
+    imagePreloader = new ImagePreloader();
+    scrollAnimations = new ScrollAnimations();
+    
+    // Load theme preference
+    loadThemePreference();
+    
+    // Preload images with progress
+    const imageUrls = photoData.map(photo => photo.image);
+    
+    imagePreloader.preload(
+        imageUrls,
+        (loaded, total) => {
+            const progress = (loaded / total) * 100;
+            loadingProgressBar.style.width = `${progress}%`;
+        },
+        () => {
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                renderPhotos();
+                setupEventListeners();
+                setupEnhancedFeatures();
+                updatePhotoCount();
+                updateViewModeText();
+            }, 500);
+        }
+    );
 }
 
 function setupEventListeners() {
@@ -169,11 +199,14 @@ function setupEventListeners() {
 
     // Search functionality
     searchToggle.addEventListener('click', toggleSearch);
-    searchInput.addEventListener('input', handleSearch);
+    searchInput.addEventListener('input', PhotoGalleryUtils.debounce(handleSearch, 300));
     searchClear.addEventListener('click', clearSearch);
 
     // View toggle
     viewToggle.addEventListener('click', toggleView);
+    
+    // Theme toggle
+    themeToggle.addEventListener('click', toggleTheme);
 
     // Lightbox events
     lightboxClose.addEventListener('click', closeLightbox);
@@ -184,8 +217,8 @@ function setupEventListeners() {
     // Keyboard events
     document.addEventListener('keydown', handleKeyboard);
 
-    // Intersection Observer for scroll animations
-    setupIntersectionObserver();
+    // Enhanced scroll events
+    window.addEventListener('scroll', PhotoGalleryUtils.throttle(handleScroll, 16));
 }
 
 function renderPhotos() {
@@ -209,8 +242,9 @@ function renderPhotos() {
 
 function createPhotoCard(photo, index) {
     const card = document.createElement('div');
-    card.className = 'photo-card scroll-reveal';
+    card.className = 'photo-card reveal-on-scroll';
     card.onclick = () => openLightbox(index);
+    card.setAttribute('data-delay', index * 50);
 
     const randomHeight = currentViewMode === 'masonry' ? 
         `${Math.floor(Math.random() * 150) + 200}px` : '250px';
@@ -224,6 +258,19 @@ function createPhotoCard(photo, index) {
                  style="${currentViewMode === 'masonry' ? 'height: auto;' : `height: ${randomHeight};`}"
                  onload="this.classList.remove('loading')"
                  onerror="this.src='https://via.placeholder.com/400x300?text=Image+Not+Found'">
+            <button class="photo-share-btn tooltip" data-tooltip="分享图片" onclick="sharePhoto(${index}, event)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"/>
+                    <circle cx="6" cy="12" r="3"/>
+                    <circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+            </button>
+            <div class="photo-tags">
+                <span class="photo-tag">${getCategoryName(photo.category)}</span>
+                <span class="photo-tag">${formatDate(photo.date)}</span>
+            </div>
             <div class="photo-overlay">
                 <div class="photo-overlay-content">
                     <h3>${photo.title}</h3>
@@ -245,6 +292,9 @@ function createPhotoCard(photo, index) {
         </div>
     `;
 
+    // Add to scroll animations
+    scrollAnimations.observe(card);
+    
     return card;
 }
 
@@ -580,22 +630,205 @@ document.addEventListener('touchend', e => {
     handleGesture();
 });
 
-// Export functions for potential external use
+// Enhanced feature functions
+function setupEnhancedFeatures() {
+    // Setup magnetic buttons
+    setupMagneticButtons();
+    
+    // Setup cursor follower
+    setupCursorFollower();
+    
+    // Setup advanced interactions
+    setupAdvancedInteractions();
+}
+
+function setupMagneticButtons() {
+    const magneticButtons = document.querySelectorAll('.magnetic-btn');
+    
+    magneticButtons.forEach(btn => {
+        btn.addEventListener('mouseenter', function(e) {
+            this.style.transition = 'none';
+        });
+        
+        btn.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            this.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+        
+        btn.addEventListener('mouseleave', function(e) {
+            this.style.transition = 'var(--transition)';
+            this.style.transform = 'translate(0, 0)';
+        });
+    });
+}
+
+function setupCursorFollower() {
+    const cursor = document.createElement('div');
+    cursor.className = 'cursor-follow';
+    document.body.appendChild(cursor);
+    
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.opacity = '1';
+    });
+    
+    document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+    });
+    
+    function animateCursor() {
+        cursorX += (mouseX - cursorX) * 0.1;
+        cursorY += (mouseY - cursorY) * 0.1;
+        
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+}
+
+function setupAdvancedInteractions() {
+    // Enhanced photo card interactions
+    const photoCards = document.querySelectorAll('.photo-card');
+    
+    photoCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.zIndex = '10';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.zIndex = '1';
+        });
+    });
+}
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.add('theme-transition');
+    
+    if (isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        `;
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+        `;
+    }
+    
+    // Save theme preference
+    localStorage.setItem('photoGalleryTheme', isDarkMode ? 'dark' : 'light');
+    
+    setTimeout(() => {
+        document.body.classList.remove('theme-transition');
+    }, 300);
+}
+
+function loadThemePreference() {
+    const savedTheme = localStorage.getItem('photoGalleryTheme');
+    if (savedTheme === 'dark') {
+        isDarkMode = false; // Will be toggled to true
+        toggleTheme();
+    }
+}
+
+function handleScroll() {
+    const header = document.querySelector('.header');
+    const scrollTop = window.pageYOffset;
+    
+    if (scrollTop > 100) {
+        header.classList.add('glass-effect');
+    } else {
+        header.classList.remove('glass-effect');
+    }
+}
+
+function sharePhoto(index, event) {
+    event.stopPropagation();
+    const photo = currentPhotos[index];
+    
+    if (navigator.share) {
+        navigator.share({
+            title: photo.title,
+            text: photo.description,
+            url: photo.image
+        });
+    } else {
+        // Fallback to clipboard
+        PhotoGalleryUtils.copyToClipboard(photo.image)
+            .then(() => {
+                showNotification('图片链接已复制到剪贴板！');
+            })
+            .catch(() => {
+                showNotification('分享失败，请手动复制链接');
+            });
+    }
+}
+
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary-color);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        z-index: 10000;
+        transform: translateX(100%);
+        transition: var(--transition);
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+function updateViewModeText() {
+    viewMode.textContent = currentViewMode === 'grid' ? '网格' : '瀑布流';
+}
+
+function updatePhotoCount() {
+    photoCount.textContent = currentPhotos.length;
+    loadedCount.textContent = currentPhotos.length;
+}
+
+// Export enhanced functions for potential external use
 window.PhotoGallery = {
-    addPhoto: (photo) => {
-        photoData.push({ ...photo, id: Date.now() });
-        if (currentFilter === 'all' || currentFilter === photo.category) {
-            filterPhotos(currentFilter);
-        }
-    },
-    removePhoto: (id) => {
-        const index = photoData.findIndex(photo => photo.id === id);
-        if (index > -1) {
-            photoData.splice(index, 1);
-            filterPhotos(currentFilter);
-        }
-    },
-    getPhotos: () => [...photoData],
-    setFilter: filterPhotos,
-    openPhoto: openLightbox
+    ...window.PhotoGallery,
+    toggleTheme,
+    sharePhoto,
+    showNotification,
+    currentViewMode: () => currentViewMode,
+    isDarkMode: () => isDarkMode
 };
