@@ -1,0 +1,29 @@
+{
+  "name": "photo-gallery",
+  "version": "1.0.0",
+  "description": "一个精美的相册展示网站",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 3000",
+    "serve": "python3 -m http.server 8080",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "echo 'Ready for deployment to Cloudflare Pages'"
+  },
+  "keywords": [
+    "photo",
+    "gallery",
+    "portfolio",
+    "responsive",
+    "pwa"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/photo-gallery.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/photo-gallery/issues"
+  },
+  "homepage": "https://your-gallery.pages.dev"
+}

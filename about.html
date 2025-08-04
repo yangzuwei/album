@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于 - 精美相册</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .about-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .about-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        .about-content h2 {
+            color: var(--text-primary);
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="about-container">
+        <a href="index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5"/>
+                <path d="M12 19l-7-7 7-7"/>
+            </svg>
+            返回相册
+        </a>
+        
+        <div class="about-header">
+            <h1>关于精美相册</h1>
+            <p>一个现代化的图片展示平台</p>
+        </div>
+        
+        <div class="about-content">
+            <p>精美相册是一个专为摄影爱好者和图片展示设计的现代化网站。我们致力于提供最佳的图片浏览体验，让每一张照片都能以最美的方式呈现。</p>
+            
+            <h2>✨ 核心特性</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>精美设计</h3>
+                    <p>现代化的界面设计，注重细节和用户体验</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>响应式布局</h3>
+                    <p>完美适配桌面、平板和手机等各种设备</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>极速加载</h3>
+                    <p>图片懒加载和缓存优化，提供流畅体验</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>智能搜索</h3>
+                    <p>支持标题、描述和分类的全文搜索</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3>灯箱效果</h3>
+                    <p>沉浸式的图片浏览体验，支持键盘和触摸操作</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>多种布局</h3>
+                    <p>网格和瀑布流两种展示模式，随心切换</p>
+                </div>
+            </div>
+            
+            <h2>🚀 技术亮点</h2>
+            <ul>
+                <li>原生 JavaScript 开发，无第三方依赖</li>
+                <li>CSS3 动画和过渡效果</li>
+                <li>PWA (Progressive Web App) 支持</li>
+                <li>Service Worker 离线缓存</li>
+                <li>Intersection Observer API 实现滚动动画</li>
+                <li>触摸手势支持</li>
+            </ul>
+            
+            <h2>🌍 部署说明</h2>
+            <p>本项目为纯静态网站，可以轻松部署到各种静态托管平台：</p>
+            <ul>
+                <li>Cloudflare Pages</li>
+                <li>Netlify</li>
+                <li>Vercel</li>
+                <li>GitHub Pages</li>
+                <li>或任何支持静态网站的服务器</li>
+            </ul>
+            
+            <h2>🎯 设计理念</h2>
+            <p>我们相信，好的设计应该是直观的、美观的、功能性的。精美相册的每一个细节都经过精心设计，从颜色搭配到动画效果，从布局结构到交互体验，都力求为用户提供最佳的视觉享受。</p>
+            
+            <h2>📞 联系我们</h2>
+            <p>如果您有任何问题、建议或想要合作，欢迎随时联系我们。我们很乐意听取您的反馈，并不断改进产品。</p>
+        </div>
+    </div>
+</body>
+</html>
