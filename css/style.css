@@ -36,7 +36,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 1.5rem;
 }
@@ -233,15 +233,44 @@ body {
 /* Gallery */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
     margin-bottom: 3rem;
 }
 
 .gallery.masonry {
     column-count: auto;
-    column-width: 280px;
+    column-width: 250px;
     column-gap: 1.5rem;
+}
+
+/* 超宽屏幕优化 */
+@media (min-width: 1600px) {
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.25rem;
+    }
+    
+    .gallery.masonry {
+        column-width: 220px;
+        column-gap: 1.25rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
+    }
+    
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .gallery.masonry {
+        column-width: 200px;
+        column-gap: 1rem;
+    }
 }
 
 .gallery.masonry .photo-card {
