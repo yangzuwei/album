@@ -1,33 +1,16 @@
-# Cloudflare Pages 配置
-# 此文件用于配置 Cloudflare Pages 的构建和部署设置
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
-# 构建设置
-build:
-  command: ""  # 无需构建命令，直接部署静态文件
-  output: "/"  # 输出目录为根目录
-  
-# 环境变量
-environment:
-  NODE_VERSION: "18"
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
 
-# 重定向规则（如果需要）
-redirects:
-  - from: "/home"
-    to: "/"
-    status: 301
-    
-# 头部信息设置
-headers:
-  "/*":
-    - "X-Frame-Options: DENY"
-    - "X-Content-Type-Options: nosniff"
-    - "Referrer-Policy: strict-origin-when-cross-origin"
-    - "Cache-Control: public, max-age=31536000, immutable"
-  "/":
-    - "Cache-Control: public, max-age=3600"
-  "*.html":
-    - "Cache-Control: public, max-age=3600"
-  "*.css":
-    - "Cache-Control: public, max-age=31536000, immutable"
-  "*.js":
-    - "Cache-Control: public, max-age=31536000, immutable"
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.html
+  Cache-Control: public, max-age=3600
+
+/
+  Cache-Control: public, max-age=3600
