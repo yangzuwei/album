@@ -72,6 +72,79 @@ const photoData = [
 ];
 ```
 
+### 🖼️ 精美图片资源推荐
+
+#### **免费高质量图片网站**
+
+1. **Unsplash** ⭐⭐⭐⭐⭐
+   - 网址：https://unsplash.com/
+   - 特点：高质量、免费、无版权限制
+   - 推荐搜索：nature, architecture, portrait, food, minimalist
+
+2. **Pexels** ⭐⭐⭐⭐⭐
+   - 网址：https://www.pexels.com/
+   - 特点：免费、高分辨率、商用友好
+   - 有中文界面，搜索方便
+
+3. **Pixabay** ⭐⭐⭐⭐
+   - 网址：https://pixabay.com/
+   - 特点：免费、多样化、包含插图和矢量图
+
+#### **Unsplash 图片 URL 构建技巧**
+
+```javascript
+// 基础格式
+https://images.unsplash.com/photo-[PHOTO_ID]?ixlib=rb-4.0.3&auto=format&fit=crop&w=WIDTH&q=QUALITY
+
+// 示例：获取不同尺寸的图片
+const photoId = "1506905925346-21bda4d32df4";
+const fullSize = `https://images.unsplash.com/photo-${photoId}?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80`;
+const thumbnail = `https://images.unsplash.com/photo-${photoId}?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80`;
+
+// 使用搜索关键词获取随机图片
+https://source.unsplash.com/800x600/?nature
+https://source.unsplash.com/800x600/?city,architecture
+https://source.unsplash.com/800x600/?portrait,people
+https://source.unsplash.com/800x600/?food,cooking
+```
+
+#### **推荐的图片主题和关键词**
+
+**自然风光 (nature):**
+- `landscape, mountains, forest, ocean, sunset, stars`
+- `waterfall, beach, desert, autumn, spring, winter`
+- `flowers, trees, wildlife, valley, lake, river`
+
+**城市建筑 (city):**
+- `architecture, building, urban, skyline, street`
+- `modern, classic, bridge, tower, downtown`
+- `night, lights, reflection, geometric, minimal`
+
+**人像摄影 (portrait):**
+- `people, person, face, model, expression`
+- `business, lifestyle, family, children, elderly`
+- `black-and-white, natural-light, studio, fashion`
+
+**美食摄影 (food):**
+- `cooking, restaurant, meal, dish, ingredients`
+- `coffee, dessert, bread, fruit, vegetables`
+- `plating, colorful, rustic, elegant, healthy`
+
+### 使用丰富图片数据
+
+项目中已包含 `enriched-photos.js`，包含32张精选高质量图片：
+
+```html
+<!-- 在 HTML 中引入 -->
+<script src="js/enriched-photos.js"></script>
+
+<!-- 然后在 app.js 中使用 -->
+<script>
+// 使用丰富的图片数据替换原有数据
+const photoData = enrichedPhotoData;
+</script>
+```
+
 ### 修改主题色彩
 
 在 `css/style.css` 中修改 CSS 变量：

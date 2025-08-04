@@ -87,9 +87,6 @@ class ParticleBackground {
         if (this.animationId) {
             cancelAnimationFrame(this.animationId);
         }
-        if (this.canvas) {
-            this.canvas.remove();
-        }
     }
 }
 
@@ -277,7 +274,6 @@ class PhotoGalleryUtils {
 }
 
 // 导出到全局
-window.ParticleBackground = ParticleBackground;
 window.ImagePreloader = ImagePreloader;
 window.ScrollAnimations = ScrollAnimations;
 window.PhotoGalleryUtils = PhotoGalleryUtils;

@@ -86,6 +86,11 @@ class ImageShowcaseEffects {
             lightboxImage.style.filter = 'none';
         } else {
             lightboxImage.style.filter = this.filters[filterName];
+            
+            // 触发滤镜使用事件用于成就系统
+            document.dispatchEvent(new CustomEvent('filterUsed', {
+                detail: { filter: filterName }
+            }));
         }
 
         // 添加过渡效果
@@ -177,6 +182,11 @@ class ImageShowcaseEffects {
         const lightbox = document.getElementById('lightbox');
         if (!lightbox) return;
 
+        // 检查是否已经添加了控制面板
+        if (lightbox.querySelector('.lightbox-advanced-controls')) {
+            return; // 已经存在，避免重复添加
+        }
+
         // 添加更多控制按钮
         const controls = document.createElement('div');
         controls.className = 'lightbox-advanced-controls';
@@ -198,6 +208,9 @@ class ImageShowcaseEffects {
 
         // 添加键盘快捷键
         this.setupKeyboardShortcuts();
+
+        // 绑定主页面滤镜按钮
+        this.setupMainFilterButton();
     }
 
     bindAdvancedControls() {
@@ -433,6 +446,77 @@ class ImageShowcaseEffects {
     setupImageComparison() {
         // 图片对比功能（为未来功能预留）
         this.comparisonMode = false;
+    }
+
+    setupMainFilterButton() {
+        const mainFilterBtn = document.getElementById('filterToggleMain');
+        if (mainFilterBtn) {
+            mainFilterBtn.addEventListener('click', () => {
+                // 如果灯箱是打开的，显示滤镜面板
+                const lightbox = document.getElementById('lightbox');
+                if (lightbox && lightbox.classList.contains('active')) {
+                    this.showFilterPanel();
+                } else {
+                    // 如果灯箱未打开，显示提示
+                    this.showFilterInstruction();
+                }
+            });
+        }
+    }
+
+    showFilterInstruction() {
+        const instruction = document.createElement('div');
+        instruction.className = 'filter-instruction';
+        instruction.innerHTML = `
+            <div class="instruction-content">
+                <h3>🎨 滤镜功能</h3>
+                <p>请先点击任意照片进入查看模式，然后点击底部的滤镜按钮 🎨 来使用滤镜功能</p>
+                <div class="instruction-demo">
+                    <div class="demo-step">
+                        <span class="step-number">1</span>
+                        <span class="step-text">点击照片</span>
+                    </div>
+                    <div class="demo-arrow">→</div>
+                    <div class="demo-step">
+                        <span class="step-number">2</span>
+                        <span class="step-text">点击 🎨 按钮</span>
+                    </div>
+                    <div class="demo-arrow">→</div>
+                    <div class="demo-step">
+                        <span class="step-number">3</span>
+                        <span class="step-text">选择滤镜</span>
+                    </div>
+                </div>
+                <button class="instruction-close">知道了</button>
+            </div>
+        `;
+        
+        document.body.appendChild(instruction);
+        
+        setTimeout(() => {
+            instruction.classList.add('show');
+        }, 100);
+        
+        instruction.querySelector('.instruction-close').addEventListener('click', () => {
+            instruction.classList.remove('show');
+            setTimeout(() => {
+                if (instruction.parentNode) {
+                    instruction.parentNode.removeChild(instruction);
+                }
+            }, 300);
+        });
+        
+        // 自动关闭
+        setTimeout(() => {
+            if (instruction.parentNode) {
+                instruction.classList.remove('show');
+                setTimeout(() => {
+                    if (instruction.parentNode) {
+                        instruction.parentNode.removeChild(instruction);
+                    }
+                }, 300);
+            }
+        }, 5000);
     }
 
     // 图片预加载优化
@@ -693,6 +777,113 @@ showcaseStyles.textContent = `
 
     .toast.show {
         transform: translateX(0);
+    }
+
+    .filter-instruction {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10005;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .filter-instruction.show {
+        opacity: 1;
+    }
+
+    .instruction-content {
+        background: var(--card-background);
+        padding: 30px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        border: 1px solid var(--border-color);
+    }
+
+    .instruction-content h3 {
+        margin: 0 0 16px 0;
+        color: var(--text-primary);
+        font-size: 1.5rem;
+    }
+
+    .instruction-content p {
+        margin: 0 0 24px 0;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    .instruction-demo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: 24px 0;
+        flex-wrap: wrap;
+    }
+
+    .demo-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+        background: var(--background);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        min-width: 80px;
+    }
+
+    .step-number {
+        width: 24px;
+        height: 24px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .step-text {
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .demo-arrow {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .instruction-close {
+        width: 100%;
+        padding: 12px 24px;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        margin-top: 16px;
+    }
+
+    .instruction-close:hover {
+        background: var(--primary-color-dark);
+        transform: translateY(-1px);
     }
 
     @keyframes slideInRight {

@@ -227,7 +227,6 @@ let isLightboxOpen = false;
 let isDarkMode = false;
 
 // Enhanced instances
-let particleBackground = null;
 let imagePreloader = null;
 let scrollAnimations = null;
 
@@ -266,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initializeApp() {
     // Initialize enhanced components
-    particleBackground = new ParticleBackground();
     imagePreloader = new ImagePreloader();
     scrollAnimations = new ScrollAnimations();
     
@@ -790,9 +788,6 @@ function setupEnhancedFeatures() {
     // Setup magnetic buttons
     setupMagneticButtons();
     
-    // Setup cursor follower
-    setupCursorFollower();
-    
     // Setup advanced interactions
     setupAdvancedInteractions();
 }
@@ -818,38 +813,6 @@ function setupMagneticButtons() {
             this.style.transform = 'translate(0, 0)';
         });
     });
-}
-
-function setupCursorFollower() {
-    const cursor = document.createElement('div');
-    cursor.className = 'cursor-follow';
-    document.body.appendChild(cursor);
-    
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.opacity = '1';
-    });
-    
-    document.addEventListener('mouseleave', () => {
-        cursor.style.opacity = '0';
-    });
-    
-    function animateCursor() {
-        cursorX += (mouseX - cursorX) * 0.1;
-        cursorY += (mouseY - cursorY) * 0.1;
-        
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-        
-        requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
 }
 
 function setupAdvancedInteractions() {

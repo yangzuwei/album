@@ -2,7 +2,6 @@
 class AdvancedEffects {
     constructor() {
         this.initializeEffects();
-        this.createParallaxElements();
         this.setupAdvancedAnimations();
         this.createStarfield();
     }
@@ -135,68 +134,12 @@ class AdvancedEffects {
         }
     }
 
-    createParallaxElements() {
-        // 创建浮动装饰元素
-        for (let i = 0; i < 20; i++) {
-            this.createFloatingElement();
-        }
-    }
-
-    createFloatingElement() {
-        const element = document.createElement('div');
-        element.className = 'floating-decoration';
-        element.style.cssText = `
-            position: fixed;
-            width: ${Math.random() * 6 + 2}px;
-            height: ${Math.random() * 6 + 2}px;
-            background: rgba(99, 102, 241, ${Math.random() * 0.3 + 0.1});
-            border-radius: 50%;
-            left: ${Math.random() * 100}%;
-            top: ${Math.random() * 100}%;
-            pointer-events: none;
-            z-index: -1;
-            animation: float ${Math.random() * 10 + 15}s ease-in-out infinite;
-        `;
-        
-        document.body.appendChild(element);
-    }
-
     setupAdvancedAnimations() {
-        // 高级页面加载动画
-        this.enhanceLoadingAnimation();
-        
         // 滚动触发动画
         this.setupScrollAnimations();
         
         // 鼠标跟踪效果
         this.setupMouseEffects();
-    }
-
-    enhanceLoadingAnimation() {
-        const loadingScreen = document.getElementById('loadingScreen');
-        if (loadingScreen) {
-            // 添加粒子效果到加载屏幕
-            this.addParticlesToLoading(loadingScreen);
-        }
-    }
-
-    addParticlesToLoading(container) {
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'loading-particle';
-            particle.style.cssText = `
-                position: absolute;
-                width: 3px;
-                height: 3px;
-                background: var(--primary-color);
-                border-radius: 50%;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-                animation: sparkle ${Math.random() * 3 + 2}s ease-in-out infinite;
-                animation-delay: ${Math.random() * 2}s;
-            `;
-            container.appendChild(particle);
-        }
     }
 
     setupScrollAnimations() {
@@ -229,9 +172,6 @@ class AdvancedEffects {
     setupMouseEffects() {
         // 鼠标跟踪光标效果
         this.createCustomCursor();
-        
-        // 鼠标移动粒子效果
-        this.setupMouseParticles();
     }
 
     createCustomCursor() {
@@ -269,45 +209,6 @@ class AdvancedEffects {
                 cursor.style.background = 'radial-gradient(circle, rgba(99, 102, 241, 0.6) 0%, transparent 70%)';
             }
         }, true);
-    }
-
-    setupMouseParticles() {
-        let particles = [];
-        
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() < 0.1) { // 10%概率生成粒子
-                this.createMouseParticle(e.clientX, e.clientY);
-            }
-        });
-    }
-
-    createMouseParticle(x, y) {
-        const particle = document.createElement('div');
-        particle.className = 'mouse-particle';
-        
-        const colors = ['#6366f1', '#06b6d4', '#a855f7', '#ec4899'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        particle.style.cssText = `
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: ${color};
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-            left: ${x}px;
-            top: ${y}px;
-            animation: particleFade 1s ease-out forwards;
-        `;
-        
-        document.body.appendChild(particle);
-        
-        setTimeout(() => {
-            if (particle.parentNode) {
-                particle.parentNode.removeChild(particle);
-            }
-        }, 1000);
     }
 
     // 按钮点击爆炸效果
@@ -417,11 +318,6 @@ class AdvancedEffects {
 // CSS动画关键帧（通过JavaScript添加）
 const styleSheet = document.createElement('style');
 styleSheet.textContent = `
-    @keyframes sparkle {
-        0%, 100% { opacity: 0; transform: scale(0); }
-        50% { opacity: 1; transform: scale(1); }
-    }
-    
     @keyframes slideInUp {
         from { opacity: 0; transform: translateY(50px); }
         to { opacity: 1; transform: translateY(0); }
@@ -441,11 +337,6 @@ styleSheet.textContent = `
         0% { opacity: 0; transform: scale(0.3); }
         50% { opacity: 1; transform: scale(1.1); }
         100% { opacity: 1; transform: scale(1); }
-    }
-    
-    @keyframes particleFade {
-        0% { opacity: 1; transform: scale(1) translateY(0); }
-        100% { opacity: 0; transform: scale(0) translateY(-50px); }
     }
     
     @keyframes shimmer {
